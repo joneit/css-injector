@@ -1,11 +1,11 @@
 {
   "name": "css-injector",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "description": "Creates stylesheets out of strings",
   "repository": {
     "type": "git",
-    "url": "git://joneit.com/openfin/css-injector.git"
+    "url": "https://github.com/joneit/css-injector"
   },
   "scripts": {
     "test": "gulp test"

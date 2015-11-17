@@ -7,7 +7,7 @@ Bakes one or more baseline mandatory stylesheets into your JavaScript -- i.e., w
 ## Synopsis
 
 ```javascript
-cssInjector(stylesheet _[_ , id _[_ , refereneceElement _] ]_ );
+cssInjector(stylesheet [ , id [ , refereneceElement ] ] );
 ```
 where:
 * `stylesheet` is a string _or_ a list of strings containing css rules.
