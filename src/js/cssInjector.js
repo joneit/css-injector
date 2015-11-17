@@ -2,6 +2,8 @@
 
 /* eslint-env browser */
 
+/** @namespace cssInjector */
+
 (function (module) {  // eslint-disable-line no-unused-expressions
 
     // This closure supports NodeJS-less client side includes with <script> tags. See https://github.com/joneit/mnm.
@@ -9,12 +11,15 @@
     /**
      * @summary Insert base stylesheet into DOM
      * @desc Creates a new `<style>...</style>` element from the named text string(s) and inserts it.
+     * @returns A reference to the newly created `<style>...</style>` element.
      * @param {string|string[]} cssRules
      * @param {string} [ID]
-     * @param {string|Element|undefined|null} [referenceElement]
-     * * `undefined` type (or omitted): injects stylesheet at top of `<head...</head>` element
+     * @param {undefined|null|Element|string} [referenceElement] - Overloads:
+     * * `undefined` type (or omitted): injects stylesheet at top of `<head>...</head>` element
      * * `null` value: injects stylesheet at bottom of `<head>...</head>` element
-     * * `Element` type: injects stylesheet immediately before given element
+     * * `Element` type: injects stylesheet immediately before given element, wherever it is found.
+     * * `string` type: injects stylesheet immediately before given first element found that matches the given css selector.
+     * @memberOf cssInjector
      */
     function cssInjector(cssRules, ID, referenceElement) {
         if (ID) {
@@ -56,8 +61,16 @@
         }
 
         container.insertBefore(style, referenceElement);
+
+        return style;
     }
 
+    /**
+     * @summary Optional prefix for `<style>` tag IDs.
+     * @desc Defaults to `'injected-stylesheet-'`.
+     * @type {string}
+     * @memberOf cssInjector
+     */
     cssInjector.idPrefix = 'injected-stylesheet-';
 
     // Interface

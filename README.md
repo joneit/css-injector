@@ -32,4 +32,4 @@ for important information on cloning this repo or re-purposing its build templat
 
 ## API documentation
 
-Detailed API docs can be found [here](http://openfin.github.io/css-injector).
+Detailed API docs can be found [here](http://openfin.github.io/css-injector/css-injector.html).
