@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 org="joneit"
-module="css-injector"
 
 # set variable repo to current directory name (without path)
 repo=${PWD##*/}
@@ -26,11 +25,8 @@ git rm -rf -q .
 # copy the doc directory from the workspace
 cp -R ../../$repo/doc/* . >/dev/null
 
-# copy index.js from repo/. to the cdn directory as $module.js
-cp ../../$repo/index.js ./$module.js >/dev/null
-
-# make a minified version
-uglify -s $module.js -o $module.min.js
+# copy repo/build to the cdn directory
+cp ../../$repo/build/* . >/dev/null
 
 # send it up
 git add . >/dev/null
@@ -44,5 +40,5 @@ popd >/dev/null
 rm -rf ../temp >/dev/null
 
 echo 'Opening page at http://$org.github.io/$repo/ ...'
-open http://$org.github.io/$repo/
+open http://$org.github.io/$repo/cssInjector.html
 echo 'CAVEAT: New pages will not be immediately available so wait a few minutes and refresh.'

@@ -1,8 +1,0 @@
-.*
-*.sh
-README.md
-doc
-jsdoc-template
-node_modules
-src
-test

@@ -8,23 +8,22 @@ var runSequence = require('run-sequence'),
     exec        = require('child_process').exec,
     path        = require('path');
 
-var srcDir  = './src/',
-    testDir = './test/',
-    jsDir   = srcDir + 'js/',
-    jsFiles = '**/*.js',
-    destDir = './';
-
-var js = {
-    dir   : jsDir,
-    files : jsDir + jsFiles
-};
+var name     = 'css-injector',
+    srcDir   = './src/',
+    testDir  = './test/',
+    buildDir = './build/';
 
 //  //  //  //  //  //  //  //  //  //  //  //
 
 gulp.task('lint', lint);
 gulp.task('test', test);
 gulp.task('doc', doc);
-gulp.task('rootify', rootify);
+gulp.task('browserify', function(callback) {
+    browserify();
+    browserifyMin();
+    callback();
+});
+gulp.task('serve', browserSyncLaunchServer);
 
 gulp.task('build', function(callback) {
     clearBashScreen();
@@ -32,7 +31,7 @@ gulp.task('build', function(callback) {
         'lint',
         'test',
         'doc',
-        'rootify',
+        'browserify',
         callback);
 });
 
@@ -48,7 +47,7 @@ gulp.task('default', ['watch', 'build'], browserSyncLaunchServer);
 //  //  //  //  //  //  //  //  //  //  //  //
 
 function lint() {
-    return gulp.src(js.files)
+    return gulp.src(srcDir + name + '.js')
         .pipe($$.excludeGitignore())
         .pipe($$.eslint())
         .pipe($$.eslint.format())
@@ -68,19 +67,37 @@ function doc(cb) {
     });
 }
 
-function rootify() {
-    return gulp.src(js.dir + 'cssInjector.js')
-        .pipe($$.rename('index.js'))
-        .pipe(gulp.dest(destDir));
+function browserify() {
+    return gulp.src(srcDir + 'browserify_root.js')
+        .pipe($$.browserify({
+            //insertGlobals : true,
+            debug : true
+        }))
+        //.pipe($$.sourcemaps.init({loadMaps: true}))
+        // Add transformation tasks to the pipeline here:
+
+        .on('error', $$.util.log)
+
+        .pipe($$.rename(name + '.js'))
+        .pipe(gulp.dest(buildDir)); // outputs to ./build/list-dragon.js for githup.io publish
+}
+
+function browserifyMin() {
+    return gulp.src(srcDir + 'browserify_root.js')
+        .pipe($$.browserify())
+        .pipe($$.uglify())
+        .pipe($$.rename(name + '.min.js'))
+        .pipe(gulp.dest(buildDir)); // outputs to ./build/list-dragon.min.js for githup.io publish
 }
 
 function browserSyncLaunchServer() {
     browserSync.init({
         server: {
-            // Serve up our test html file
-            baseDir: srcDir
+            // Serve up our build folder
+            baseDir: buildDir,
+            index: "demo.html"
         },
-        port: 5000
+        port: 5004
     });
 }
 
